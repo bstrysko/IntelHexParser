@@ -9,19 +9,23 @@
 #ifndef _INTEL_HEX_PARSER_INTEL_HEX_FILE_H_
 #define _INTEL_HEX_PARSER_INTEL_HEX_FILE_H_
 
+#include <fstream>
 #include <sstream>
 #include <string>
-#include <vector>
+#include <map>
 #include <stdint.h>
 
+#include "IntelHexFileEntry.h"
 #include "Program.h"
 
 using namespace std;
 
+#define INTEL_HEX_FILE_MAX_ENTRY_SIZE 524
+
 class IntelHexFile
 {
   private:
-  
+    map<uint16_t, IntelHexFileEntry> addressToFileEntries;
   public:
     IntelHexFile();
     ~IntelHexFile();

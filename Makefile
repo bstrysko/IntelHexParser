@@ -1,17 +1,17 @@
 # Source Files
 SRC = \
-	src/I2CBus.cpp \
-	src/I2CDevice.cpp
+	src/IntelHexFile.cpp \
+	src/IntelHexFileEntry.cpp \
+	src/Program.cpp \
+	src/ProgramPage.cpp
 
 OBJ = $(SRC:.cpp=.o)
-LIBNAME = libI2CMaster.so
-OUT = $(LIBNAME).1
-REALNAME = $(OUT)
+OUT = libIntelHexParser.a
 
 # Include Directories
 INCLUDES = -I./include/
 
-CCFLAGS = -g -fPIC
+CCFLAGS = -g
 CCC = g++
 
 #Library Paths
@@ -26,17 +26,14 @@ all: build
 
 build: $(OUT)
  
+$(OUT): $(OBJ)
+	$(CCC) rcs $(OUT) $(OBJ)
+
 .cpp.o:
-	$(CCC) $(INCLUDES) $(CCFLAGS) -c $< -o $@
- 
-$(LIB_OUT): $(OBJ)
-	$(CCC) -shared -Wl,-soname,$(OUT) -o $(REALNAME) $(OBJ) 
+	$(CCC) $(INCLUDES) $(CCFLAGS) -c $< -o $@ 
 
 install: build
-	mkdir -p /usr/include/I2CMaster/
-	cp include/* /usr/include/I2CMaster/
-	cp $(REALNAME) /usr/lib/
-	ln -sf /usr/lib/$(REALNAME) /usr/lib/$(LIBNAME)
+	echo "Not yet implemented"
 
 clean:
 	rm -f $(OBJ) $(OUT)

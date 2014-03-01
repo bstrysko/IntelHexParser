@@ -12,6 +12,7 @@
 #define _INTEL_HEX_PARSER_PROGRAM_H_
 
 #include <sstream>
+#include <map>
 #include <vector>
 #include <stdint.h>
 
@@ -26,7 +27,7 @@ class Program
     size_t pageSize;
     vector<ProgramPage> pages;
   public:
-    Program(size_t pageSize, vector<IntelHexFileEntry>);
+    Program(size_t pageSize, map<uint16_t, IntelHexFileEntry> addressToFileEntries);
     ~Program();
 
     size_t getPageSize();

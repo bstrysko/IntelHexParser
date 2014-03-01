@@ -10,6 +10,7 @@
 #define _INTEL_HEX_PARSER_INTEL_HEX_FILE_ENTRY_H_
 
 #include <sstream>
+#include <string>
 #include <vector>
 #include <stdint.h>
 
@@ -18,10 +19,13 @@ using namespace std;
 class IntelHexFileEntry
 {
   private:
+    bool parsed;
     uint16_t address;
     uint8_t recordType;
     vector<uint8_t> data;
     uint8_t checksum;
+
+    uint64_t asciiHexTo64(string s);
   public:
     IntelHexFileEntry();
     ~IntelHexFileEntry();
