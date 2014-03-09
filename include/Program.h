@@ -2,10 +2,8 @@
  * Program.h
  * Created by Brent Strysko
  *
- * A Program represents the data
- * stored by a Intel Hex File
- * organized in increasing page address
- * order.
+ * A Program represents the executable data
+ * stored by a Intel Hex File.
  */
 
 #ifndef _INTEL_HEX_PARSER_PROGRAM_H_
@@ -24,15 +22,14 @@ using namespace std;
 class Program
 {
   private:
-    size_t pageSize;
-    vector<ProgramPage> pages;
+    vector<uint8_t> data;
   public:
-    Program(size_t pageSize, map<uint16_t, IntelHexFileEntry> addressToFileEntries);
+    Program(const map<uint16_t, IntelHexFileEntry>& addressToFileEntries);
     ~Program();
 
-    size_t getPageSize();
+    vector<ProgramPage> getPages(size_t pageSize);
 
-    vector<ProgramPage> getPages();
+    friend ostream& operator<<(ostream& os, const Program& rhs);
 };
 
 #endif

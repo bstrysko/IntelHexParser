@@ -1,16 +1,8 @@
 #include <IntelHexFile.h>
 
-IntelHexFile::IntelHexFile()
-{
+#include <iostream>
 
-}
-
-IntelHexFile::~IntelHexFile()
-{
-
-}
-
-void IntelHexFile::load(string filename)
+IntelHexFile::IntelHexFile(string filename)
 {
 	ifstream file(filename.c_str());
 
@@ -36,13 +28,35 @@ void IntelHexFile::load(string filename)
 			break;
 		}
 
-		IntelHexFileEntry entry;
-		entry.parseEntry(buffer);
+		IntelHexFileEntry entry(buffer);
+
+		if((entry.getRecordType() != 0x0) && (entry.getRecordType() != 0x1))
+		{
+			stringstream o;
+			o << "Unsupported record type: 0x";
+			o << hex << (uint32_t)entry.getRecordType();
+			throw ios_base::failure(o.str());
+		}
+
 		addressToFileEntries.insert(pair<uint16_t, IntelHexFileEntry>(entry.getAddress(), entry));
 	}
 }
 
-Program IntelHexFile::getProgram(size_t pageSize)
+IntelHexFile::~IntelHexFile()
 {
-	return Program(pageSize, addressToFileEntries);
 }
+
+Program IntelHexFile::getProgram()
+{
+	return Program((const map<uint16_t, IntelHexFileEntry>)addressToFileEntries);
+}
+
+ostream& operator<<(ostream& os, const IntelHexFile& rhs)
+{
+	size_t lAddress = (rhs.addressToFileEntries.begin())->first;	
+	size_t hAddress = ((rhs.addressToFileEntries.rbegin())->second).getEndAddress();
+	size_t size = rhs.addressToFileEntries.size();
+
+	os << "[Address Range: 0x" << hex << (size_t)lAddress << "-0x" << hex << (size_t)hAddress << ", Number of HexFileEntries: " << dec << size << "]";
+}
+

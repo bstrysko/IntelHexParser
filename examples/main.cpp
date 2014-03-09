@@ -1,6 +1,7 @@
 #include "../include/IntelHexFile.h"
 
 #include <iostream>
+#include <assert.h>
 
 using namespace std;
 
@@ -15,23 +16,20 @@ int main(int argc, char* argv[])
 		usage(argv[0]);
 	}
 
-	IntelHexFile file;
+	IntelHexFile file(argv[1]);
 
-	file.load(argv[1]);
+	cout << "File: " << file << endl;
 
-	cout << file << endl;
+	Program program = file.getProgram();
+	
+	cout << "Program: " << program << endl;
 
-	Program program = file.getProgram(PAGE_SIZE);
-	assert(program.getPageSize() == PAGE_SIZE);
-
-	cout << program << endl;
-
-	vector<ProgramPage> programPages = program.getPages();
+	vector<ProgramPage> programPages = program.getPages(PAGE_SIZE);
 
 	for(vector<ProgramPage>::iterator it = programPages.begin(); it != programPages.end(); ++it)
 	{
 		ProgramPage page = (*it);
-		cout << page << endl;
+		cout << "Page: " << page << endl;
 	}
 
 	return 0;

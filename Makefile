@@ -27,7 +27,7 @@ all: build
 build: $(OUT)
  
 $(OUT): $(OBJ)
-	$(CCC) rcs $(OUT) $(OBJ)
+	ar rcs $(OUT) $(OBJ)
 
 .cpp.o:
 	$(CCC) $(INCLUDES) $(CCFLAGS) -c $< -o $@ 

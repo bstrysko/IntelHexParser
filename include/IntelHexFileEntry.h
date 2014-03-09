@@ -19,7 +19,6 @@ using namespace std;
 class IntelHexFileEntry
 {
   private:
-    bool parsed;
     uint16_t address;
     uint8_t recordType;
     vector<uint8_t> data;
@@ -28,12 +27,12 @@ class IntelHexFileEntry
     uint64_t asciiHexTo64(string s);
   public:
     IntelHexFileEntry();
+    IntelHexFileEntry(string entry);
     ~IntelHexFileEntry();
-
-    void parseEntry(string entry);
 
     uint8_t getByteCount();
     uint16_t getAddress();
+    uint16_t getEndAddress() const;
     uint8_t getRecordType();
     vector<uint8_t> getData();
     uint8_t getChecksum();

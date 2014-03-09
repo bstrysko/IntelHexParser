@@ -27,12 +27,12 @@ class IntelHexFile
   private:
     map<uint16_t, IntelHexFileEntry> addressToFileEntries;
   public:
-    IntelHexFile();
+    IntelHexFile(string filename);
     ~IntelHexFile();
 
-    void load(string filename);
+    Program getProgram();
 
-    Program getProgram(size_t pageSize);
+    friend ostream& operator<<(ostream& os, const IntelHexFile& rhs);
 };
 
 #endif

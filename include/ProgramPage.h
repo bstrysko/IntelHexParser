@@ -10,8 +10,12 @@
 #ifndef _INTEL_HEX_PARSER_PROGRAM_PAGE_H_
 #define _INTEL_HEX_PARSER_PROGRAM_PAGE_H_
 
+#include "IntelHexFileEntry.h"
+
 #include <sstream>
+#include <vector>
 #include <stdint.h>
+#include <string.h>
 
 using namespace std;
 
@@ -20,18 +24,18 @@ class ProgramPage
   private:
     size_t address;
     size_t size;
-    uint8_t* data;
+    vector<uint8_t> data;
   public:
-    ProgramPage(size_t address, size_t size);
+    ProgramPage(size_t address, size_t size, const vector<uint8_t>& pageData);
     ~ProgramPage();
 
     size_t getAddress();
     size_t getSize();
+    size_t getEndAddress(); 
 
-    void write8(size_t offset, uint8_t v);
-    void write16(size_t offset, uint16_t v);
+    vector<uint8_t> getData();
 
-    uint8_t* getData();
+    friend ostream& operator<<(ostream& os, const ProgramPage& rhs);
 };
 
 #endif
