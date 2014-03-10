@@ -1,4 +1,13 @@
 Install
 ==============
 
+In the main folder
 
+make
+
+
+To compile and run example
+
+cd examples/
+make
+./example [*.hex]

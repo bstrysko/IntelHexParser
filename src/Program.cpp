@@ -14,7 +14,6 @@ Program::Program(const map<uint16_t, IntelHexFileEntry>& addressToFileEntries)
 		for(size_t i = 0; i < entryData.size(); i++)
 		{
 			uint8_t v = entryData[i];
-
 			data[address + i] = v;
 		}
 	}
@@ -30,13 +29,7 @@ vector<ProgramPage> Program::getPages(size_t pageSize)
 
 	for(size_t i = 0; i < data.size(); i+= pageSize)
 	{
-		//TODO: make min
-		size_t pageEndAddress = i + pageSize;
-
-		if(pageEndAddress > data.size())
-		{
-			pageEndAddress = data.size();
-		}
+		size_t pageEndAddress = min(i + pageSize, data.size());
 
 		vector<uint8_t> pageData(data.begin() +i, data.begin() + pageEndAddress);
 		ProgramPage p(i, pageSize, pageData);

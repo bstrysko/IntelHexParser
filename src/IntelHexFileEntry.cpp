@@ -4,7 +4,6 @@
 
 IntelHexFileEntry::IntelHexFileEntry()
 {
-
 }
 
 IntelHexFileEntry::IntelHexFileEntry(string entry)
@@ -18,14 +17,18 @@ IntelHexFileEntry::IntelHexFileEntry(string entry)
 	}
 
 	uint8_t count = 2*asciiHexTo64(entry.substr(1,2));
-	address = asciiHexTo64(entry.substr(3,4));
+	uint8_t hAddress = asciiHexTo64(entry.substr(3,2));
+	uint8_t lAddress = asciiHexTo64(entry.substr(5,2));
+	address = ((hAddress << 8) | lAddress);
 	recordType = asciiHexTo64(entry.substr(7,2));	
+
+	uint8_t cChecksum = (count/2) + lAddress + hAddress + recordType;
 
 	if(count != entry.length()-(9+2+1))
 	{
 		stringstream o;
 		o << "length provided != length of data | ";
-		o << (uint32_t)(count);
+		o << (size_t)(count);
 		o << " != ";
 		o << (entry.length()-(9+2+1));
 
@@ -34,12 +37,29 @@ IntelHexFileEntry::IntelHexFileEntry(string entry)
 
 	for(uint8_t i = 0; i < count; i+=2)
 	{
-		data.push_back(asciiHexTo64(entry.substr(9+i,2)));
+		uint8_t v = asciiHexTo64(entry.substr(9+i,2));
+		cChecksum += v;
+		data.push_back(v);
 	}
 
 	uint8_t checksum = asciiHexTo64(entry.substr(entry.length()-3,2));
 
-	//TODO: compute checksum
+	if(((uint8_t)(cChecksum + checksum)) != ((uint8_t)0))
+	{
+		cout << hex << (size_t)address << endl;
+		cout << dec;
+
+		stringstream o;
+		o << "(cChecksum + checksum) != 0 | 0x";
+		o << hex;
+		o << (size_t)(cChecksum + checksum);
+		o << " != 0 | cChecksum = 0x";
+		o << (size_t)cChecksum;
+		o << ", checksum = 0x";
+		o << (size_t)checksum;
+
+		throw ios_base::failure(o.str());
+	}
 }
 
 IntelHexFileEntry::~IntelHexFileEntry()

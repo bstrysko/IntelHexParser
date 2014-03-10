@@ -4,7 +4,7 @@
  *
  * A ProgramPage represents the data
  * that a processor with a page of size
- * size would hold at address.
+ * pageSize would hold at address.
  */
 
 #ifndef _INTEL_HEX_PARSER_PROGRAM_PAGE_H_
@@ -23,15 +23,16 @@ class ProgramPage
 {
   private:
     size_t address;
-    size_t size;
+    size_t pageSize;
     vector<uint8_t> data;
   public:
-    ProgramPage(size_t address, size_t size, const vector<uint8_t>& pageData);
+    ProgramPage(size_t address, size_t pageSize, const vector<uint8_t>& pageData);
     ~ProgramPage();
 
     size_t getAddress();
+    size_t getPageSize();
     size_t getSize();
-    size_t getEndAddress(); 
+    size_t getEndAddress();
 
     vector<uint8_t> getData();
 
