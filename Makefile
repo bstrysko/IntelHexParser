@@ -1,3 +1,5 @@
+LNAME = IntelHexParser
+
 # Source Files
 SRC = \
 	src/IntelHexFile.cpp \
@@ -6,12 +8,14 @@ SRC = \
 	src/ProgramPage.cpp
 
 OBJ = $(SRC:.cpp=.o)
-OUT = libIntelHexParser.a
+LIBNAME = lib$(LNAME).so
+OUT = $(LIBNAME).1
+REALNAME = $(OUT)
 
 # Include Directories
 INCLUDES = -I./include/
 
-CCFLAGS = -g
+CCFLAGS = -g -fPIC
 CCC = g++
 
 #Library Paths
@@ -27,13 +31,18 @@ all: build
 build: $(OUT)
  
 $(OUT): $(OBJ)
-	ar rcs $(OUT) $(OBJ)
+	$(CCC) -shared -Wl,-soname,$(OUT) -o $(REALNAME) $(OBJ) 
 
 .cpp.o:
 	$(CCC) $(INCLUDES) $(CCFLAGS) -c $< -o $@ 
 
+
 install: build
-	echo "Not yet implemented"
+	mkdir -p /usr/include/$(LNAME)/
+	cp include/* /usr/include/$(LNAME)/
+	cp $(REALNAME) /usr/lib/
+	ln -sf /usr/lib/$(REALNAME) /usr/lib/$(LIBNAME)
 
 clean:
 	rm -f $(OBJ) $(OUT)
+

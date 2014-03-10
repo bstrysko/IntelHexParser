@@ -4,7 +4,7 @@ Install
 In the main folder
 
 make
-
+sudo make install
 
 To compile and run example
 

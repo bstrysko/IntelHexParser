@@ -1,2 +1,2 @@
 all:
-	g++ main.cpp ../libIntelHexParser.a -o example
+	g++ main.cpp -o example -l IntelHexParser
